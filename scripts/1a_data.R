@@ -8,13 +8,14 @@
 library(terra)  # mapping
 library(geodata)  # downloading data and maps
 library(fuzzySim)  # cleaning and gridding data
+library(sf) # to read geopackages
 
-# the following command sets the working directory to the folder that contains this script:
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))  # if you get an error, try running this again, or do it via the RStudio menu "Session - Set Working Directory - To Source File Location"
-getwd()
+# # the following command sets the working directory to the folder that contains this script:
+# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))  # if you get an error, try running this again, or do it via the RStudio menu "Session - Set Working Directory - To Source File Location"
+# getwd()
 
-# the next command creates a folder for the output files of this course (if it doesn't already exist):
-if (!file.exists("../outputs")) dir.create("../outputs")  # '../' goes up one level from the current working directory, so this creates the 'outputs' folder just outside the 'scripts' folder
+# # the next command creates a folder for the output files of this course (if it doesn't already exist):
+# if (!file.exists("../outputs")) dir.create("../outputs")  # '../' goes up one level from the current working directory, so this creates the 'outputs' folder just outside the 'scripts' folder
 
 # download/import a world countries map for geographical context:
 countries <- geodata::world(path = "../outputs")
@@ -23,6 +24,7 @@ countries <- geodata::world(path = "../outputs")
 # IMPORT SPECIES OCCURRENCE DATA ####
 
 # the code below imports a sample dataset; you can place your own data in the course materials 'practicals/inputs' folder and change the path below accordingly
+my_presences <- st_read("your_file.gpkg", layer = "layer_name")
 #my_presences <- read.csv("../inputs/elephant_tracking/African_elephant_HwangeNP.csv")
 #nrow(my_presences)
 
