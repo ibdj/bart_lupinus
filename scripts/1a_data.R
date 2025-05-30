@@ -24,27 +24,25 @@ countries <- geodata::world(path = "../outputs")
 # IMPORT SPECIES OCCURRENCE DATA ####
 
 # the code below imports a sample dataset; you can place your own data in the course materials 'practicals/inputs' folder and change the path below accordingly
-my_presences <- st_read("your_file.gpkg", layer = "layer_name")
+my_presences <- st_read("/Users/ibdj/Library/CloudStorage/OneDrive-Aarhusuniversitet/MappingPlants/gis/mapping_plants.gpkg", layer = "lupines_manual_observations") |> filter(!st_is_empty(geom)) |> select(geom)
 #my_presences <- read.csv("../inputs/elephant_tracking/African_elephant_HwangeNP.csv")
-#nrow(my_presences)
+nrow(my_presences)
 
 # convert the table to a spatial object (like when you import a delimited text file into a GIS, you need to specify the names of the columns that contain the spatial coordinates (point geometry), and preferably also the geographic projection / coordinate reference system):
 #head(my_presences) # see which columns contain the spatial coordinates to provide as 'geom' below
+my_presences <- terra::vect(my_presences)
 #my_presences <- terra::vect(my_presences, geom = c("location.long", "location.lat"), keepgeom = TRUE, crs = "EPSG:4326")
-#plot(my_presences, cex = 0.2)
+plot(my_presences, cex = 0.2)
 
 # plot a part of the countries map and these presences on top:
 plot(countries, ext = terra::ext(my_presences) + 2, col = "tan", background = "lightblue")
-#plot(my_presences, cex = 0.2, col = "blue", add = TRUE)  # if your points don't overlap where they should, you may need to use terra::project() - ask me for help if needed!
+plot(my_presences, cex = 0.2, col = "blue", add = TRUE)  # if your points don't overlap where they should, you may need to use terra::project() - ask me for help if needed!
 
 
 # DOWNLOAD ADDITIONAL OCCURRENCE DATA FROM GBIF ####
 
 # example terrestrial species:
 my_species <- "Lupinus nootkatensis"  # if you choose another species, change it here, not all over the script!
-
-# example marine species:
-# my_species <- "Phocoena sinus"
 
 
 # mind that data download takes a long time when there are many occurrences! first, check how many occurrences are available for this species, without downloading them:
@@ -58,8 +56,7 @@ plot(countries, col = "tan", background = "lightblue")  # see coordinates in the
 
 # set the coordinates of your desired extent, e.g.:
 download_window <- terra::ext(-25, -10, 63, 67)  # xmin, xmax, ymin, ymax
-# or for the MARINE EXAMPLE species:
-# download_window <- terra::ext(-120, -110, 25, 35)  # xmin, xmax, ymin, ymax
+
 
 plot(download_window, border = "green", lwd = 2, add = TRUE)  # confirm it's where you want it on the map
 # plot country borders within 'download_window' only:
