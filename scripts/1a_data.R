@@ -21,6 +21,29 @@ library(spocc) # to get occurrence data from many sources
 # download/import a world countries map for geographical context:
 countries <- geodata::world(path = "../outputs")
 
+#### making a boudning box of greenland ####
+
+# Define coordinates (longitude, latitude)
+coords <- matrix(c(
+  -73.28017131112495, 76.61315970775617,
+  -60.18446818612494, 70.01211154150936,
+  -52.80165568612494, 58.89183455418781,
+  -42.07899943612494, 59.02779388584994,
+  -16.907356599079215, 68.57455767473039,
+  -12.300848145703972, 78.27085546637706,
+  -10.103582520703974, 82.02855694088292,
+  -36.998113770703974, 83.86375354502037,
+  -57.037176270703974, 82.52448345612233,
+  -68.63873877070397, 80.45351582356292,
+  -74.16369276335968, 78.10778647008141,
+  -73.28017131112495, 76.61315970775617  # Closing the polygon
+), ncol = 2, byrow = TRUE)
+
+# Create polygon geometry
+polygon <- st_polygon(list(coords)) |> 
+  st_sfc(crs = 4326) |>   # Set WGS84 coordinate reference system
+  st_sf()                 # Convert to sf object
+
 
 # IMPORT SPECIES OCCURRENCE DATA ####
 
@@ -67,6 +90,9 @@ plot(countries, col = "tan", background = "lightblue", ext = download_window)
 # if global data are too much (too many occurrences or too large area for timely computation DURING THE COURSE), download GBIF data from the chosen window only:
 # for the TERRESTRIAL EXAMPLE SPECIES, add args=c("year=2018,2025") to the below command, otherwise the download will take much longer!
 gbif_raw <- sp_occurrence(genus = "", species = my_species, ext = download_window, fixnames = FALSE)
+
+all_data_bases <- occ(query = my_species, from = c("gbif","inat"), has_coords = TRUE)
+summary(all_data_bases)
 
 # check how the data are organized:
 head(gbif_raw)
