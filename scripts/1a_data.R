@@ -9,6 +9,7 @@ library(terra)  # mapping
 library(geodata)  # downloading data and maps
 library(fuzzySim)  # cleaning and gridding data
 library(sf) # to read geopackages
+library(spocc) # to get occurrence data from many sources
 
 # # the following command sets the working directory to the folder that contains this script:
 # setwd(dirname(rstudioapi::getActiveDocumentContext()$path))  # if you get an error, try running this again, or do it via the RStudio menu "Session - Set Working Directory - To Source File Location"
